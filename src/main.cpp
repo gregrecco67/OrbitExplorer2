@@ -24,6 +24,7 @@ int main(){
     planet1.startPoint = planet1.getPosition();
     Planet planet2{Vector2{255, 372}};
     planet2.startPoint = planet2.getPosition();
+    planet2.circle.fillColor = Color{0xb2, 0x17, 0x0a, 255};
     
     Planet sun{center};
     sun.setFillColor(YELLOW);
@@ -53,7 +54,7 @@ int main(){
     Direction direction({10, 310}, 30);
 
     Slider massRatioSlider(10, 610, "Mass Ratio");
-    massRatioSlider.setRange(1.0f, 500.f);
+    massRatioSlider.setRange(1.0f, 2000.f);
     massRatioSlider.setSliderValue(200.f);
     Slider animSlider(10, 670, "Anim. Speed");
     animSlider.setRange(0.f, 5.f);
@@ -100,6 +101,7 @@ int main(){
             planet1.setPosition(planet1.startPoint);
             planet2.setPosition(planet2.startPoint);
             sun.setPosition(sun.startPoint);
+            sun.velocity = Vector2{0, 0};
             float v = velSlider1.sliderValue;
             float a = dirSlider1.sliderValue;
             planet1.velocity = {std::cosf(a * DEG2RAD) * v, -std::sinf(a * DEG2RAD) * v};
@@ -113,8 +115,6 @@ int main(){
             //direction.velAngle = std::atan2(-planet1.velocity.y, planet1.velocity.x) * RAD2DEG;
             minVel2 = v; maxVel2 = v;
             minDist2 = Vector2Distance(planet2.getPosition(), sun.getPosition()); maxDist2 = minDist2;
-
-
         } 
         if (IsKeyReleased(KEY_T)) { isTracing = !isTracing; }  // 'T': trace planet1's path
         if (IsKeyReleased(KEY_C)) { // 'C': clear traces
@@ -221,6 +221,7 @@ int main(){
         animSlider.setSliderValue(animSlider.getSliderValue());
         animSlider.draw();
         massRatioSlider.yCord = height - 145;
+        massRatioSlider.setSliderValue(massRatioSlider.getSliderValue());
         massRatioSlider.draw();
 
         // display measurements:
@@ -274,9 +275,6 @@ int main(){
     return 0;
 }
 
-
-// check IsWindowResized()
-
 // web compilation:
 
 // em++ -std=c++20 -o game.html src/main.cpp src/Slider.cpp -Os -Wall \
@@ -284,14 +282,3 @@ int main(){
 -L ~/dev/emsdk/upstream/emscripten/cache/sysroot/lib/libraylib.a -s USE_GLFW=3 -s ASYNCIFY --preload-file resources \
 --shell-file minshell.html -DPLATFORM_WEB ~/dev/emsdk/upstream/emscripten/cache/sysroot/lib/libraylib.a
 //
-
-// put this back in to load FT libs
-//-I/opt/homebrew/opt/freetype/include/freetype2 -I/opt/homebrew/opt/libpng/include/libpng16 \
-
-// freetype cflags
-// -I/opt/homebrew/opt/freetype/include/freetype2 -I/opt/homebrew/opt/libpng/include/libpng16
-
-// to run:
-  // emrun game.html
-
-// OR:
