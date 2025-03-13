@@ -27,6 +27,7 @@ int main(){
     planet2.circle.fillColor = Color{0xb2, 0x17, 0x0a, 255};
     
     Planet sun{center};
+    sun.startPoint = center;
     sun.setFillColor(YELLOW);
     sun.circle.radius = 20;
     
@@ -53,9 +54,9 @@ int main(){
 
     Direction direction({10, 310}, 30);
 
-    Slider massRatioSlider(10, 610, "Mass Ratio");
-    massRatioSlider.setRange(1.0f, 2000.f);
-    massRatioSlider.setSliderValue(200.f);
+    // Slider massRatioSlider(10, 610, "Mass Ratio");
+    // massRatioSlider.setRange(1.0f, 2000.f);
+    // massRatioSlider.setSliderValue(200.f);
     Slider animSlider(10, 670, "Anim. Speed");
     animSlider.setRange(0.f, 5.f);
     animSlider.setSliderValue(1.5f);
@@ -167,12 +168,10 @@ int main(){
                 centripetalDir2 /= distance2;
                 float impulse1 = animationSpeed * force / (std::pow(distance1, 2) * divisor); // how strong a push?
                 float impulse2 = animationSpeed * force / (std::pow(distance2, 2) * divisor); 
-                float mass = massRatioSlider.getSliderValue();
+                
                 
                 planet1.velocity += centripetalDir1 * impulse1; // apply push
                 planet2.velocity += centripetalDir2 * impulse2;
-                sun.velocity -= centripetalDir1 * impulse1 / mass; // same pushes to sun
-                sun.velocity -= centripetalDir2 * impulse2 / mass; // up to mass ratio
             }
             // update readouts
             direction.velAngle = std::atan2(-planet1.velocity.y, planet1.velocity.x) * RAD2DEG;
@@ -220,9 +219,6 @@ int main(){
         animSlider.yCord = height - 85;
         animSlider.setSliderValue(animSlider.getSliderValue());
         animSlider.draw();
-        massRatioSlider.yCord = height - 145;
-        massRatioSlider.setSliderValue(massRatioSlider.getSliderValue());
-        massRatioSlider.draw();
 
         // display measurements:
         float left = width - 240;
